@@ -9,4 +9,5 @@ interface PostInterface
     public function getPostBySlug($slug);
     public function getComments($post);
     public function getCategory($post);
+    public function getPostsCategory($post);
 }

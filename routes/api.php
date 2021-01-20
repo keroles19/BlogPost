@@ -19,7 +19,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['namespace' => 'Api'], function () {
     Route::apiResources([
-            'post' => 'PostController'
+            'post' => 'PostController',
+            'category' => 'CategoryController'
         ]
     );
+
+    Route::get('category/{slug}/posts', 'CategoryController@postsCategory');
+    Route::get('search/{query}', 'PostController@search');
+
+    Route::get('add_comment','CommentController@store')->name('addComment');
+
 });
+
+Route::group(['namespace' => 'Api\Auth'], function () {
+
+    require_once __DIR__ . '/Api/auth.php';
+
+
+});
+

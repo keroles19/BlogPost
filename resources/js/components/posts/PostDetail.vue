@@ -16,7 +16,7 @@
 
       <!-- Date/Time -->
       <p>Posted  <strong class="badge badge-primary p-1"></strong> {{post.created_at}}
-        <span class="float-right"><strong class="badge badge-info p-1" v-if="post.comments">{{ post.comments.length }}</strong> comments</span></p>
+        <span class="float-right"><strong class="badge badge-info p-1" v-if="post.comments">{{ comments.length }}</strong> comments</span></p>
 
       <hr>
 
@@ -37,7 +37,7 @@
         <div class="card-body">
           <form>
             <div class="form-group">
-              <textarea class="form-control" rows="3"></textarea>
+              <textarea v-model="body" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Single Comment -->
-      <div class="media mb-4" v-for="(comment,index) in post.comments" :key="index">
+      <div class="media mb-4" v-for="(comment,index) in comments" :key="index">
         <img class="d-flex mr-3 rounded-circle" width="70px" :src="'/uploads/user_images/'+comment.user.profile_img" alt="">
         <div class="media-body">
           <h5 class="mt-0">{{comment.user.name}}</h5>
@@ -88,18 +88,40 @@
 export default {
   data(){
     return {
-     post : ''
+      post : '',
+      body : '',
+      post_id : '',
+      comments : []
     }
   },
   created() {
     this.getPostDetails();
+    this.updateToken();
   },
   methods :{
     getPostDetails(){
       axios.get('/api/post/'+this.$route.params.slug).then(res => {
-        this.post = res.data
+        this.post = res.data;
+        this.post_id = res.data.post_id;
+        this.comments = res.data.comments;
       })
       .catch(error => console.log(error));
+    },
+    addComment(){
+      axios.post('/api/add_comment',).then(res => {
+        this.post = res.data;
+        this.comments.unshift(res.data);
+      })
+          .catch(error => console.log(error));
+    },
+    updateToken(){
+      let token = JSON.parse(localStorage.getItem('token'));
+      this.$store.commit('setToken',token);
+    }
+  },
+  computed:{
+    isLogin(){
+      return this.$store.getters.getToken;
     }
   }
 }

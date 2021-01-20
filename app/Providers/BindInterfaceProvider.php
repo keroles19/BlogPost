@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Repository\Eloquent\Categeroies;
 use App\Http\Repository\Eloquent\PostEloquent;
 use App\Http\Repository\Interfaces\PostInterface;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +20,7 @@ class BindInterfaceProvider extends ServiceProvider
             PostInterface::class,
             PostEloquent::class
         );
+        $this->app->bind(Categeroies::class);
 
     }
 

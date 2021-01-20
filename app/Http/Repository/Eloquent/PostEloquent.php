@@ -4,7 +4,9 @@
 namespace App\Http\Repository\Eloquent;
 
 
+use App\Category;
 use App\Http\Repository\Interfaces\PostInterface;
+use App\Post;
 
 class PostEloquent implements PostInterface
 {
@@ -32,4 +34,11 @@ class PostEloquent implements PostInterface
     {
         return $post->category;
     }
+    public function getPostsCategory($slug){
+        $category = Category::whereSlug($slug)->first();
+        $post = Post::whereCategoryId($category->id)->with('user')->get();
+        $post['comments'] = $this->getComments($post);
+        return response()->json($post);
+    }
+
 }

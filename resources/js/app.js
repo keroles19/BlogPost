@@ -9,6 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -22,15 +25,19 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('global', require('./components/Global.vue').default);
-
+Vue.component('register', require('./components/auth/Register.vue').default);
+Vue.component('login', require('./components/auth/Login.vue').default);
+Vue.component('pagination', require('laravel-vue-pagination'));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 import router from "./routes/router";
+import store from "./store/store";
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store: store
 
 });

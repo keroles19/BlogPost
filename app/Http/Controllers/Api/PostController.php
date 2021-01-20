@@ -22,4 +22,10 @@ class PostController extends AbstractController
         $post['category'] = $this->eloquent->getCategory($post) ;
       return response()->json($post);
     }
+    public function search($query){
+        $posts = $this->model->where('title','like','%'.$query.'%')->with('user','comments');
+        $count = count($posts->get());
+        // return all data to  one page
+        return response()->json($posts->paginate(intval($count)));
+    }
 }
